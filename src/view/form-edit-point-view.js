@@ -12,7 +12,6 @@ const createFormEditPointTemplate = (editPoint) => {
     offers,
     type,
     destination,
-    id
   } = editPoint;
 
   const pointDateFrom = formatDateForForm(dateFrom);
@@ -26,8 +25,8 @@ const createFormEditPointTemplate = (editPoint) => {
     const checked = editPoint.offers.includes(offer.id) ? 'checked' : '';
     return (`
         <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${id}" type="checkbox" name="event-offer-luggage" ${checked}>
-          <label class="event__offer-label" for="event-offer-luggage-${id}">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" ${checked}>
+          <label class="event__offer-label" for="event-offer-${offer.id}">
             <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${offer.price}</span>
@@ -151,23 +150,26 @@ const createFormEditPointTemplate = (editPoint) => {
 };
 
 export default class FormEditPointView {
+  #element = null;
+  #editPoint = null;
+
   constructor(editPoint) {
-    this.editPoint = editPoint;
+    this.#editPoint = editPoint;
   }
 
-  getTemplate() {
-    return createFormEditPointTemplate(this.editPoint);
+  get template() {
+    return createFormEditPointTemplate(this.#editPoint);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

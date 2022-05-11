@@ -1,5 +1,5 @@
 
-export const generateOffers = [
+export const offersArray = [
   {
     type: 'taxi',
     offers: [
@@ -22,11 +22,11 @@ export const generateOffers = [
     type: 'bus',
     offers: [
       {
-        'id': 1,
+        'id': 4,
         'title': 'Aliquam erat volutpat',
         'price': 40
       }, {
-        'id': 2,
+        'id': 3,
         'title': 'In rutrum ac purus sit amet tempus',
         'price': 20
       }
@@ -36,15 +36,15 @@ export const generateOffers = [
     type: 'train',
     offers: [
       {
-        'id': 1,
+        'id': 5,
         'title': 'Nunc fermentum tortor ac porta dapibus',
         'price': 80
       }, {
-        'id': 2,
+        'id': 4,
         'title': 'Aliquam erat volutpat',
         'price': 40
       }, {
-        'id': 3,
+        'id': 6,
         'title': 'Sed sed nisi sed augue convallis suscipit in sed felis',
         'price': 160
       }
@@ -54,15 +54,15 @@ export const generateOffers = [
     type: 'ship',
     offers: [
       {
-        'id': 1,
+        'id': 6,
         'title': 'Sed sed nisi sed augue convallis suscipit in sed felis',
         'price': 160
       }, {
-        'id': 2,
+        'id': 3,
         'title': 'In rutrum ac purus sit amet tempus',
         'price': 20
       }, {
-        'id': 3,
+        'id': 1,
         'title': 'Upgrade to a business class',
         'price': 120
       },
@@ -72,15 +72,15 @@ export const generateOffers = [
     type: 'drive',
     offers: [
       {
-        'id': 1,
+        'id': 5,
         'title': 'Nunc fermentum tortor ac porta dapibus',
         'price': 80
       }, {
-        'id': 2,
+        'id': 3,
         'title': 'In rutrum ac purus sit amet tempus',
         'price': 20
       }, {
-        'id': 3,
+        'id': 7,
         'title': 'Phasellus eros',
         'price': 10
       }
@@ -90,11 +90,11 @@ export const generateOffers = [
     type: 'flight',
     offers: [
       {
-        'id': 1,
+        'id': 5,
         'title': 'Nunc fermentum tortor ac porta dapibus',
         'price': 80
       }, {
-        'id': 2,
+        'id': 6,
         'title': 'Sed sed nisi sed augue convallis suscipit in sed felis',
         'price': 160
       }
@@ -104,11 +104,11 @@ export const generateOffers = [
     type: 'check-in',
     offers: [
       {
-        'id': 1,
+        'id': 4,
         'title': 'Aliquam erat volutpat',
         'price': 40
       }, {
-        'id': 2,
+        'id': 6,
         'title': 'Sed sed nisi sed augue convallis suscipit in sed felis',
         'price': 160
       }
@@ -118,15 +118,15 @@ export const generateOffers = [
     type: 'sightseeing',
     offers: [
       {
-        'id': 1,
+        'id': 3,
         'title': 'In rutrum ac purus sit amet tempus',
         'price': 20
       }, {
-        'id': 2,
+        'id': 6,
         'title': 'Sed sed nisi sed augue convallis suscipit in sed felis',
         'price': 160
       }, {
-        'id': 3,
+        'id': 7,
         'title': 'Phasellus eros',
         'price': 10
       }
@@ -140,11 +140,11 @@ export const generateOffers = [
         'title': 'Upgrade to a business class',
         'price': 120
       }, {
-        'id': 2,
+        'id': 6,
         'title': 'Sed sed nisi sed augue convallis suscipit in sed felis',
         'price': 160
       }, {
-        'id': 3,
+        'id': 7,
         'title': 'Phasellus eros',
         'price': 10
       }

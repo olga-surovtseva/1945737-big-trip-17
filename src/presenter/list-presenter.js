@@ -39,13 +39,29 @@ export default class ListPresenter {
       this.#tripEventsList.element.replaceChild(pointComponent.element, pointEditComponent.element);
     };
 
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
     pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replacePointToForm();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
+      evt.preventDefault();
+      replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     pointEditComponent.element.querySelector('.event__save-btn').addEventListener('submit', (evt) => {
       evt.preventDefault();
       replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
     });
 
     render(pointComponent, this.#tripEventsList.element);

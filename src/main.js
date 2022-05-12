@@ -1,6 +1,5 @@
-import TripInfoView from './view/trip-info-view.js';
 import FilterView from './view/filter-view.js';
-import {RenderPosition, render} from './render.js';
+import { render } from './render.js';
 import ListPresenter from './presenter/list-presenter.js';
 import PointModel from './model/point-model.js';
 
@@ -12,7 +11,6 @@ const tripEventsElement = document.querySelector('.trip-events');
 const pointsModel = new PointModel();
 const listPresenter = new ListPresenter();
 
-render(new TripInfoView(), tripMainElement, RenderPosition.AFTERBEGIN);
 render(new FilterView(), tripFilterElement);
 
 listPresenter.init(tripEventsElement, pointsModel);

@@ -10,6 +10,7 @@ const getRandomInteger = (min,max) => {
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
+//должна быть проверка на валидность даты?
 const formatDate = (dateFrom) => dayjs(dateFrom).format('D MMMM');
 const formatTime = (dateFrom) => dayjs(dateFrom).format('HH:mm');
 const formatDateForForm = (dateFrom) => dayjs(dateFrom).format('DD/MM/YYYY');

@@ -1,6 +1,6 @@
 import { getRandomInteger, getRandomArrayElement } from '../utils.js';
 import { generateDestination } from './destination.js';
-import { generateOffers } from './offer.js';
+import { offersArray } from './offer.js';
 
 const pointType = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
@@ -13,7 +13,7 @@ export const generatePoint = () => (
     destination: generateDestination.name,
     id: getRandomInteger(1, 3),
     isFavorite: getRandomInteger(0, 1),
-    offers: generateOffers,
+    offers: offersArray,
     type: getRandomArrayElement(pointType),
   }
 );

@@ -2,8 +2,11 @@ import SortView from '../view/sort-view.js';
 import PointView from '../view/point-view.js';
 import TripEventsListView from '../view/trip-events-list-view.js';
 import FormEditPointView from '../view/form-edit-point-view.js';
-import {render} from '../render.js';
+import ListEmptyView from '../view/list-empty-view.js';
+import TripInfoView from '../view/trip-info-view.js';
+import {render, RenderPosition} from '../render.js';
 
+const tripMainElement = document.querySelector('.trip-main');
 
 export default class ListPresenter {
 
@@ -19,8 +22,13 @@ export default class ListPresenter {
     this.#pointsModel = pointsModel;
     this.#listPoints = [...this.#pointsModel.points];
 
-    render(new SortView(), this.#listContainer);
-    render(this.#tripEventsList, this.#listContainer);
+    if(this.#listPoints.length === 0) {
+      render (new ListEmptyView(), this.#listContainer);
+    } else {
+      render(new TripInfoView(), tripMainElement, RenderPosition.AFTERBEGIN);
+      render(new SortView(), this.#listContainer);
+      render(this.#tripEventsList, this.#listContainer);
+    }
 
     this.#listPoints.forEach((point) => (
       this.#renderPoint(point)

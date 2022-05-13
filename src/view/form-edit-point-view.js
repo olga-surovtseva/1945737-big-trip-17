@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { formatTime, formatDateForForm } from '../utils.js';
+import { formatTime, formatDateForForm } from '../utils/point.js';
 import { generateDestination } from '../mock/destination.js';
 
 

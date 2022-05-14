@@ -1,5 +1,5 @@
-import {createElement} from '../render.js';
-import { formatTime, formatDateForForm } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import { formatTime, formatDateForForm } from '../utils/point.js';
 import { generateDestination } from '../mock/destination.js';
 
 
@@ -149,11 +149,11 @@ const createFormEditPointTemplate = (editPoint) => {
   );
 };
 
-export default class FormEditPointView {
-  #element = null;
+export default class FormEditPointView extends AbstractView {
   #editPoint = null;
 
   constructor(editPoint) {
+    super();
     this.#editPoint = editPoint;
   }
 
@@ -161,15 +161,23 @@ export default class FormEditPointView {
     return createFormEditPointTemplate(this.#editPoint);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('.event__save-btn').addEventListener('submit', this.#formSubmitHandler);
+  };
 
-    return this.#element;
-  }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  setFormCloseHandler = (callback) => {
+    this._callback.FormClose = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formCloseHandler);
+  };
+
+  #formCloseHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.FormClose();
+  };
 }

@@ -1,6 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatTime, formatDateForForm } from '../utils/point.js';
 import { generateDestination } from '../mock/destination.js';
+import { getOffersArray } from '../mock/offer.js';
 
 
 const createFormEditPointTemplate = (editPoint) => {
@@ -12,39 +13,42 @@ const createFormEditPointTemplate = (editPoint) => {
     offers,
     type,
     destination,
-    checked,
+    id,
   } = editPoint;
+
 
   const pointDateFrom = formatDateForForm(dateFrom);
   const pointTimeFrom = formatTime(dateFrom);
   const pointDateTo = formatDateForForm(dateTo);
   const pointTimeTo = formatTime(dateTo);
 
-  // const checkboxOffer =
-  // const checkedOffers = editPoint.offers.includes(offers.id) ? 'checked' : '';
 
-  const isChecked = checked ? 'checked' : '';
+  // const isChecked = checked ? 'checked' : '';
 
-  const htmlOffer = offers.map((offer) => (`
+  const htmlOffer = offers.map((offer) => {
+
+    const checked = getOffersArray().some((item) => item.id === offer.id);
+
+    return (`
         <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" ${isChecked}>
-          <label class="event__offer-label" for="event-offer-${offer.id}">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer-${id}" ${checked}>
+          <label class="event__offer-label" for="event-offer-${id}">
             <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${offer.price}</span>
           </label>
-        </div>`)).join('');
+        </div>`);}).join('');
 
   return (
     `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
     <header class="event__header">
     <div class="event__type-wrapper">
-      <label class="event__type  event__type-btn" for="event-type-toggle-1">
+      <label class="event__type  event__type-btn" for="event-type-toggle-${editPoint.id}">
         <span class="visually-hidden">Choose event type</span>
         <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${editPoint.id}" type="checkbox">
 
       <div class="event__type-list">
         <fieldset class="event__type-group">

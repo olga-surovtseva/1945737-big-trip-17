@@ -12,6 +12,7 @@ const createFormEditPointTemplate = (editPoint) => {
     offers,
     type,
     destination,
+    checked,
   } = editPoint;
 
   const pointDateFrom = formatDateForForm(dateFrom);
@@ -19,19 +20,20 @@ const createFormEditPointTemplate = (editPoint) => {
   const pointDateTo = formatDateForForm(dateTo);
   const pointTimeTo = formatTime(dateTo);
 
+  // const checkboxOffer =
+  // const checkedOffers = editPoint.offers.includes(offers.id) ? 'checked' : '';
 
-  const pointTypeOffer = offers.find((offer) => offer.type === type);
-  const htmlOffer = pointTypeOffer.offers.map((offer) => {
-    const checked = editPoint.offers.includes(offer.id) ? 'checked' : '';
-    return (`
+  const isChecked = checked ? 'checked' : '';
+
+  const htmlOffer = offers.map((offer) => (`
         <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" ${checked}>
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" ${isChecked}>
           <label class="event__offer-label" for="event-offer-${offer.id}">
             <span class="event__offer-title">${offer.title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${offer.price}</span>
           </label>
-        </div>`);}).join('');
+        </div>`)).join('');
 
   return (
     `<li class="trip-events__item">

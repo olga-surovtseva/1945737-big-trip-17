@@ -1,4 +1,4 @@
-const pointType = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const pointTypes = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant']; //удалить, брать из offers
 
 const FilterType = {
   EVERYTHING: 'everything',
@@ -6,4 +6,4 @@ const FilterType = {
   PAST: 'past',
 };
 
-export {pointType, FilterType};
+export {pointTypes, FilterType};

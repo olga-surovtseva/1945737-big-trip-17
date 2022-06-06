@@ -13,15 +13,13 @@ const createPointTemplate = (point) => {
   const pointTimeStart = formatTime(dateFrom);
   const pointTimeEnd = formatTime(dateTo);
 
-
   const differentTimeStartEnd = formatTime(dayjs(dateTo).diff(dateFrom));
-
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : 'event__favorite-btn';
 
+  // const isChecked = checked ?
 
-  const offersFilteredByType = offers.find((offer) => offer['type'] === type).offers;
-  const htmlOffers = offersFilteredByType.map((offer) => (`
+  const htmlOffers = offers.map((offer) => (`
   <li class="event__offer">
     <span class="event__offer-title">${offer.title}</span>
     &plus;&euro;&nbsp;

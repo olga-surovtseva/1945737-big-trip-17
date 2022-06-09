@@ -1,26 +1,22 @@
 import { getRandomInteger, getRandomArrayElement} from '../utils/common.js';
-import { generateDestination } from './destination.js';
-import { getOffersArray} from './offer.js';
-// import dayjs from 'dayjs';
+import { generateDestinationName } from './destination.js';
+import { getRandomOffersByType } from '../utils/offer.js';
 import { pointTypes } from '../const.js';
 
 
 export const generatePoint = () => {
   const pointType = getRandomArrayElement(pointTypes);
-  const offersByType = getOffersArray().find((offer) => offer['type'] === pointType).offers;
-  // const randomOffers = collectionOffers.id[1];
-
+  const randomOffersByType = getRandomOffersByType(pointType);
 
   return {
     basePrice: getRandomInteger(1000, 2000),
     dateFrom: '2019-07-10T22:55:56.845Z',
     dateTo: '2019-07-13T11:22:13.375Z',
-    destination: generateDestination.name,
+    destination: generateDestinationName(),
     id: getRandomInteger(1, 7),
     isFavorite: getRandomInteger(0, 1),
-    offers: offersByType,
+    offers: randomOffersByType,
     type: pointType,
-    checked: getRandomInteger(0, 1),
   };
 };
 

@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatDate, formatTime } from '../utils/point.js';
+import { getOfferById } from '../utils/offer.js';
 import dayjs from 'dayjs';
-
 
 const createPointTemplate = (point) => {
 
@@ -17,14 +17,13 @@ const createPointTemplate = (point) => {
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : 'event__favorite-btn';
 
-  // const isChecked = checked ?
 
-  const htmlOffers = offers.map((offer) => (`
+  const htmlOffers = offers ? offers.map((offerId) => (`
   <li class="event__offer">
-    <span class="event__offer-title">${offer.title}</span>
+    <span class="event__offer-title">${getOfferById(offerId).title}</span>
     &plus;&euro;&nbsp;
-    <span class="event__offer-price">${offer.price}</span>
-  </li>`)).join('');
+    <span class="event__offer-price">${getOfferById(offerId).price}</span>
+  </li>`)).join('') : '';
 
   return (
     `<li class="trip-events__item">

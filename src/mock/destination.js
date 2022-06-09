@@ -14,7 +14,7 @@ const generateDescription = () => {
   return descriptions[randomIndex];
 };
 
-const generateName = () => {
+const generateDestinationName = () => {
   const names = [
     'Greece',
     'Dominican Republic',
@@ -31,10 +31,10 @@ const generateName = () => {
 const generateNumberOfPictures = `http://picsum.photos/300/200?r=${getRandomInteger(0, 100)}`;
 
 
-export const generateDestination = (
+const destinationSection = () => (
   {
     description: generateDescription(),
-    name: generateName(),
+    name: generateDestinationName(),
     pictures: [
       {
         src: generateNumberOfPictures,
@@ -44,3 +44,8 @@ export const generateDestination = (
   }
 );
 
+
+export {
+  generateDestinationName,
+  destinationSection,
+};

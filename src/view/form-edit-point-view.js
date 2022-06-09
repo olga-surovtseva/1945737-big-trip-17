@@ -1,12 +1,12 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatTime, formatDateForForm } from '../utils/point.js';
-import { generateDestination } from '../mock/destination.js';
-import { getOffersArray } from '../mock/offer.js';
+import { destinationSection } from '../mock/destination.js';
+import { getOffersByType, getOfferById } from '../utils/offer.js';
 
 
 const createFormEditPointTemplate = (editPoint) => {
   const {
-    description = generateDestination.description,
+    description = destinationSection().description,
     basePrice,
     dateFrom,
     dateTo,
@@ -16,28 +16,27 @@ const createFormEditPointTemplate = (editPoint) => {
     id,
   } = editPoint;
 
-
   const pointDateFrom = formatDateForForm(dateFrom);
   const pointTimeFrom = formatTime(dateFrom);
   const pointDateTo = formatDateForForm(dateTo);
   const pointTimeTo = formatTime(dateTo);
 
+  const allOffersByType = getOffersByType(type);
 
-  // const isChecked = checked ? 'checked' : '';
+  const htmlOffer = allOffersByType.map((offerId) => {
 
-  const htmlOffer = offers.map((offer) => {
-
-    const checked = getOffersArray().some((item) => item.id === offer.id);
+    const checked = offers.includes(offerId) ? 'checked' : '';
 
     return (`
         <div class="event__offer-selector">
           <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer-${id}" ${checked}>
           <label class="event__offer-label" for="event-offer-${id}">
-            <span class="event__offer-title">${offer.title}</span>
+            <span class="event__offer-title">${getOfferById(offerId).title}</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">${offer.price}</span>
+            <span class="event__offer-price">${getOfferById(offerId).price}</span>
           </label>
-        </div>`);}).join('');
+        </div>`);
+  }).join('');
 
   return (
     `<li class="trip-events__item">

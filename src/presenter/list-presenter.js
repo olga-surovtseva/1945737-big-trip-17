@@ -21,7 +21,6 @@ export default class ListPresenter {
   #listPoints = [];
   #pointPresenter = new Map();
 
-  //зачем здесь конструктор?
   constructor(listContainer, pointsModel) {
     this.#listContainer = listContainer;
     this.#pointsModel = pointsModel;
@@ -33,7 +32,6 @@ export default class ListPresenter {
     this.#renderTripEventsList();
   };
 
-  //что здесь происходит?
   #renderTrip = (from, to) => {
     this.#listPoints.slice(from, to).forEach((point) => this.#renderPoint(point));
   };
@@ -52,11 +50,11 @@ export default class ListPresenter {
   };
 
   #renderTripInfo = () => {
-    render(this.#tripInfoComponent, tripMainElement, RenderPosition.AFTERBEGIN);
+    render(this.#tripInfoComponent, tripMainElement);
   };
 
   #renderSort = () => {
-    render(this.#sortComponent, this.#listContainer);
+    render(this.#sortComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   };
 
   #renderListEmpty = () => {
@@ -64,7 +62,7 @@ export default class ListPresenter {
   };
 
   #renderPoint = (point) => {
-    const pointPresenter = new PointPresenter(this.#tripEventsListComponent.element);
+    const pointPresenter = new PointPresenter(this.#tripEventsListComponent.element, this.#handlePointChange);
     pointPresenter.init(point);
     this.#pointPresenter.set(point.id, pointPresenter);
   };

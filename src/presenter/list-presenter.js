@@ -18,6 +18,7 @@ export default class ListPresenter {
   #tripInfoComponent = new TripInfoView();
 
   #listPoints = [];
+  #pointPresenter = new Map();
 
   //зачем здесь конструктор?
   constructor(listContainer, pointsModel) {
@@ -64,5 +65,11 @@ export default class ListPresenter {
   #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#tripEventsListComponent.element);
     pointPresenter.init(point);
+    this.#pointPresenter.set(point.id, pointPresenter);
+  };
+
+  #clearPointList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
   };
 }

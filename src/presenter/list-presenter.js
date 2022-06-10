@@ -1,10 +1,9 @@
 import SortView from '../view/sort-view.js';
-import PointView from '../view/point-view.js';
 import TripEventsListView from '../view/trip-events-list-view.js';
-import FormEditPointView from '../view/form-edit-point-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import TripInfoView from '../view/trip-info-view.js';
-import { render, RenderPosition, replace } from '../framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
+import PointPresenter from './point-presenter.js';
 
 const tripMainElement = document.querySelector('.trip-main');
 
@@ -63,40 +62,7 @@ export default class ListPresenter {
   };
 
   #renderPoint = (point) => {
-    const pointComponent = new PointView(point);
-    const pointEditComponent = new FormEditPointView(point);
-
-    const replacePointToForm = () => {
-      replace(pointEditComponent, pointComponent);
-    };
-
-    const replaceFormToPoint = () => {
-      replace(pointComponent, pointEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    pointComponent.setEditClickHandler(() => {
-      replacePointToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    pointEditComponent.setFormCloseHandler(() => {
-      replaceFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    pointEditComponent.setFormSubmitHandler(() => {
-      replaceFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    render(pointComponent, this.#tripEventsListComponent.element);
+    const pointPresenter = new PointPresenter(this.#tripEventsListComponent.element);
+    pointPresenter.init(point);
   };
 }

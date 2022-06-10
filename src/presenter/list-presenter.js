@@ -13,26 +13,53 @@ export default class ListPresenter {
   #listContainer = null;
   #pointsModel = null;
 
-  #tripEventsList = new TripEventsListView();
+  #tripEventsListComponent = new TripEventsListView();
+  #listEmptyComponent = new ListEmptyView();
+  #sortComponent = new SortView();
+  #tripInfoComponent = new TripInfoView();
 
   #listPoints = [];
 
-  init = (listContainer, pointsModel) => {
+  //зачем здесь конструктор?
+  constructor(listContainer, pointsModel) {
     this.#listContainer = listContainer;
     this.#pointsModel = pointsModel;
+  }
+
+  init = () => {
     this.#listPoints = [...this.#pointsModel.points];
 
+    this.#renderTripEventsList();
+  };
+
+  //что здесь происходит?
+  #renderTrip = (from, to) => {
+    this.#listPoints.slice(from, to).forEach((point) => this.#renderPoint(point));
+  };
+
+  #renderTripEventsList = () => {
+    render(this.#tripEventsListComponent, this.#listContainer);
+
     if(this.#listPoints.length === 0) {
-      render (new ListEmptyView(), this.#listContainer);
-    } else {
-      render(new TripInfoView(), tripMainElement, RenderPosition.AFTERBEGIN);
-      render(new SortView(), this.#listContainer);
-      render(this.#tripEventsList, this.#listContainer);
+      this.#renderListEmpty();
+      return;
     }
 
-    this.#listPoints.forEach((point) => (
-      this.#renderPoint(point)
-    ));
+    this.#renderTripInfo();
+    this.#renderSort();
+    this.#renderTrip();
+  };
+
+  #renderTripInfo = () => {
+    render(this.#tripInfoComponent, tripMainElement, RenderPosition.AFTERBEGIN);
+  };
+
+  #renderSort = () => {
+    render(this.#sortComponent, this.#listContainer);
+  };
+
+  #renderListEmpty = () => {
+    render(this.#listEmptyComponent, this.#listContainer);
   };
 
   #renderPoint = (point) => {
@@ -70,6 +97,6 @@ export default class ListPresenter {
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    render(pointComponent, this.#tripEventsList.element);
+    render(pointComponent, this.#tripEventsListComponent.element);
   };
 }

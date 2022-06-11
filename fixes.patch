@@ -1,0 +1,276 @@
+diff --git a/src/mock/destination.js b/src/mock/destination.js
+index 33f12fa..baba293 100644
+--- a/src/mock/destination.js
++++ b/src/mock/destination.js
+@@ -14,7 +14,7 @@ const generateDescription = () => {
+   return descriptions[randomIndex];
+ };
+ 
+-const generateName = () => {
++export const generateName = () => {
+   const names = [
+     'Greece',
+     'Dominican Republic',
+@@ -31,7 +31,7 @@ const generateName = () => {
+ const generateNumberOfPictures = `http://picsum.photos/300/200?r=${getRandomInteger(0, 100)}`;
+ 
+ 
+-export const generateDestination = (
++export const generateDestination = () => (
+   {
+     description: generateDescription(),
+     name: generateName(),
+diff --git a/src/mock/offer.js b/src/mock/offer.js
+index b95d48f..fa3042a 100644
+--- a/src/mock/offer.js
++++ b/src/mock/offer.js
+@@ -1,42 +1,36 @@
+-import { getRandomInteger } from '../utils/common';
++import { getMultipleArrayElements } from '../utils/common';
+ 
+-const getOffersBytype = () => {
+-  const collectionOffers = [
+-    {
+-      'id': 1,
+-      'title': 'Upgrade to a business class',
+-      'price': 120
+-    }, {
+-      'id': 2,
+-      'title': 'Choose the radio station',
+-      'price': 60
+-    }, {
+-      'id': 3,
+-      'title': 'In rutrum ac purus sit amet tempus',
+-      'price': 20
+-    }, {
+-      'id': 4,
+-      'title': 'Aliquam erat volutpat',
+-      'price': 40
+-    }, {
+-      'id': 5,
+-      'title': 'Nunc fermentum tortor ac porta dapibus',
+-      'price': 80
+-    }, {
+-      'id': 6,
+-      'title': 'Sed sed nisi sed augue convallis suscipit in sed felis',
+-      'price': 160
+-    }, {
+-      'id': 7,
+-      'title': 'Phasellus eros',
+-      'price': 10
+-    }
+-  ];
+-
+-  const randomIndex = getRandomInteger(0,collectionOffers.length-1);
+-
+-  return collectionOffers[randomIndex];
+-};
++const collectionOffers = [
++  {
++    'id': 1,
++    'title': 'Upgrade to a business class',
++    'price': 120
++  }, {
++    'id': 2,
++    'title': 'Choose the radio station',
++    'price': 60
++  }, {
++    'id': 3,
++    'title': 'In rutrum ac purus sit amet tempus',
++    'price': 20
++  }, {
++    'id': 4,
++    'title': 'Aliquam erat volutpat',
++    'price': 40
++  }, {
++    'id': 5,
++    'title': 'Nunc fermentum tortor ac porta dapibus',
++    'price': 80
++  }, {
++    'id': 6,
++    'title': 'Sed sed nisi sed augue convallis suscipit in sed felis',
++    'price': 160
++  }, {
++    'id': 7,
++    'title': 'Phasellus eros',
++    'price': 10
++  }
++];
+ 
+ const getOffersArray = () => [
+   {
+@@ -77,4 +71,12 @@ const getOffersArray = () => [
+   }
+ ];
+ 
+-export {getOffersBytype, getOffersArray};
++const getOfferById = (id) => collectionOffers.find((offer) => offer.id === id);
++const getOffersByType = (pointType) => getOffersArray().find((offer) => offer.type === pointType).offers;
++
++const getRandomOffersByType = (pointType) => {
++  const offers = getOffersByType(pointType);
++  return getMultipleArrayElements(offers);
++};
++
++export {getOffersByType, getOffersArray, getRandomOffersByType, getOfferById};
+diff --git a/src/mock/point.js b/src/mock/point.js
+index cde3781..3ebe281 100644
+--- a/src/mock/point.js
++++ b/src/mock/point.js
+@@ -1,24 +1,22 @@
+ import { getRandomInteger, getRandomArrayElement} from '../utils/common.js';
+-import { generateDestination } from './destination.js';
+-import { getOffersArray} from './offer.js';
++import { generateName as generateDestinationName } from './destination.js';
++import { getRandomOffersByType } from './offer.js';
+ // import dayjs from 'dayjs';
+ import { pointTypes } from '../const.js';
+ 
+ 
+ export const generatePoint = () => {
+   const pointType = getRandomArrayElement(pointTypes);
+-  const offersByType = getOffersArray().find((offer) => offer['type'] === pointType).offers;
+-  // const randomOffers = collectionOffers.id[1];
+-
++  const randomOffersByType = getRandomOffersByType(pointType);
+ 
+   return {
+     basePrice: getRandomInteger(1000, 2000),
+     dateFrom: '2019-07-10T22:55:56.845Z',
+     dateTo: '2019-07-13T11:22:13.375Z',
+-    destination: generateDestination.name,
++    destination: generateDestinationName(),
+     id: getRandomInteger(1, 7),
+     isFavorite: getRandomInteger(0, 1),
+-    offers: offersByType,
++    offers: randomOffersByType,
+     type: pointType,
+     checked: getRandomInteger(0, 1),
+   };
+diff --git a/src/utils/common.js b/src/utils/common.js
+index 0e1290b..f5bcf7e 100644
+--- a/src/utils/common.js
++++ b/src/utils/common.js
+@@ -1,34 +1,25 @@
+-const getRandomInteger = (min,max) => {
++const getRandomInteger = (min, max) => {
+   const lowerValue = Math.ceil(Math.min(min, max));
+   const upperValue = Math.floor(Math.max(min, max));
+-  return Math.floor(Math.random()*(upperValue-lowerValue+1)+lowerValue);
++  return Math.floor(Math.random() * (upperValue-lowerValue + 1) + lowerValue);
+ };
+ 
+-const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+-
+-const getMultipleArrayElements = (arr, length) => {
++const shuffleArray = (arr) => {
++  const result = [];
+ 
+-  function first() {
+-    return arr.slice(0, length);
+-  }
+-
+-  function shuffle() {
+-    const result = [];
+-
+-    while (arr.length > 0) {
+-      const random = getRandomInt(0, arr.length - 1);
+-      const elem = arr.splice(random, 1)[0];
+-      result.push(elem);
+-    }
+-
+-    return result;
++  while (arr.length > 0) {
++    const random = getRandomInteger(0, arr.length - 1);
++    const elem = arr.splice(random, 1)[0];
++    result.push(elem);
+   }
++  return result;
++};
+ 
+-  function getRandomInt(min, max) {
+-    return Math.floor(Math.random() * (max - min + 1)) + min;
+-  }
++const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+ 
+-  return first(shuffle(arr), length);
++const getMultipleArrayElements = (elements) => {
++  const arrLength = elements.length;
++  return shuffleArray(elements).slice(0, getRandomInteger(0, arrLength));
+ };
+ 
+ export {
+diff --git a/src/view/form-edit-point-view.js b/src/view/form-edit-point-view.js
+index 525262a..e092195 100644
+--- a/src/view/form-edit-point-view.js
++++ b/src/view/form-edit-point-view.js
+@@ -1,7 +1,7 @@
+ import AbstractView from '../framework/view/abstract-view.js';
+ import { formatTime, formatDateForForm } from '../utils/point.js';
+ import { generateDestination } from '../mock/destination.js';
+-import { getOffersArray } from '../mock/offer.js';
++import { getOffersByType, getOfferById } from '../mock/offer.js';
+ 
+ 
+ const createFormEditPointTemplate = (editPoint) => {
+@@ -22,22 +22,24 @@ const createFormEditPointTemplate = (editPoint) => {
+   const pointDateTo = formatDateForForm(dateTo);
+   const pointTimeTo = formatTime(dateTo);
+ 
++  const allOffersInType = getOffersByType(type);
+ 
+   // const isChecked = checked ? 'checked' : '';
+ 
+-  const htmlOffer = offers.map((offer) => {
++  const htmlOffer = allOffersInType.map((offer) => {
+ 
+-    const checked = getOffersArray().some((item) => item.id === offer.id);
++    const checked = offers.includes(offer) ? 'checked' : '';
+ 
+     return (`
+         <div class="event__offer-selector">
+           <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer-${id}" ${checked}>
+           <label class="event__offer-label" for="event-offer-${id}">
+-            <span class="event__offer-title">${offer.title}</span>
++            <span class="event__offer-title">${getOfferById(offer).title}</span>
+             &plus;&euro;&nbsp;
+-            <span class="event__offer-price">${offer.price}</span>
++            <span class="event__offer-price">${getOfferById(offer).price}</span>
+           </label>
+-        </div>`);}).join('');
++        </div>`);
++  }).join('');
+ 
+   return (
+     `<li class="trip-events__item">
+diff --git a/src/view/point-view.js b/src/view/point-view.js
+index b0d1cd9..1123f6b 100644
+--- a/src/view/point-view.js
++++ b/src/view/point-view.js
+@@ -1,8 +1,8 @@
+ import AbstractView from '../framework/view/abstract-view.js';
+ import { formatDate, formatTime } from '../utils/point.js';
++import { getOfferById } from '../mock/offer.js';
+ import dayjs from 'dayjs';
+ 
+-
+ const createPointTemplate = (point) => {
+ 
+   const {basePrice, destination, dateFrom, dateTo, isFavorite, offers, type} = point;
+@@ -19,12 +19,12 @@ const createPointTemplate = (point) => {
+ 
+   // const isChecked = checked ?
+ 
+-  const htmlOffers = offers.map((offer) => (`
++  const htmlOffers = offers ? offers.map((offer) => (`
+   <li class="event__offer">
+-    <span class="event__offer-title">${offer.title}</span>
++    <span class="event__offer-title">${getOfferById(offer).title}</span>
+     &plus;&euro;&nbsp;
+-    <span class="event__offer-price">${offer.price}</span>
+-  </li>`)).join('');
++    <span class="event__offer-price">${getOfferById(offer).price}</span>
++  </li>`)).join('') : '';
+ 
+   return (
+     `<li class="trip-events__item">

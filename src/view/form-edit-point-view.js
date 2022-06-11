@@ -1,17 +1,19 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatTime, formatDateForForm } from '../utils/point.js';
-import { generateDestination } from '../mock/destination.js';
+import { destinationSection } from '../mock/destination.js';
+import { getOffersByType, getOfferById } from '../utils/offer.js';
 
 
 const createFormEditPointTemplate = (editPoint) => {
   const {
-    description = generateDestination.description,
+    description = destinationSection().description,
     basePrice,
     dateFrom,
     dateTo,
     offers,
     type,
     destination,
+    id,
   } = editPoint;
 
   const pointDateFrom = formatDateForForm(dateFrom);
@@ -19,30 +21,33 @@ const createFormEditPointTemplate = (editPoint) => {
   const pointDateTo = formatDateForForm(dateTo);
   const pointTimeTo = formatTime(dateTo);
 
+  const allOffersByType = getOffersByType(type);
 
-  const pointTypeOffer = offers.find((offer) => offer.type === type);
-  const htmlOffer = pointTypeOffer.offers.map((offer) => {
-    const checked = editPoint.offers.includes(offer.id) ? 'checked' : '';
+  const htmlOffer = allOffersByType.map((offerId) => {
+
+    const checked = offers.includes(offerId) ? 'checked' : '';
+
     return (`
         <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" ${checked}>
-          <label class="event__offer-label" for="event-offer-${offer.id}">
-            <span class="event__offer-title">${offer.title}</span>
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer-${id}" ${checked}>
+          <label class="event__offer-label" for="event-offer-${id}">
+            <span class="event__offer-title">${getOfferById(offerId).title}</span>
             &plus;&euro;&nbsp;
-            <span class="event__offer-price">${offer.price}</span>
+            <span class="event__offer-price">${getOfferById(offerId).price}</span>
           </label>
-        </div>`);}).join('');
+        </div>`);
+  }).join('');
 
   return (
     `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
     <header class="event__header">
     <div class="event__type-wrapper">
-      <label class="event__type  event__type-btn" for="event-type-toggle-1">
+      <label class="event__type  event__type-btn" for="event-type-toggle-${editPoint.id}">
         <span class="visually-hidden">Choose event type</span>
         <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${editPoint.id}" type="checkbox">
 
       <div class="event__type-list">
         <fieldset class="event__type-group">

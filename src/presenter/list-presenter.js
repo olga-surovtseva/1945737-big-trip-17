@@ -5,6 +5,8 @@ import TripInfoView from '../view/trip-info-view.js';
 import { render, RenderPosition } from '../framework/render.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
+import { sortByPrice, sortByTime, sortByDay} from '../utils/point.js';
+import { SortType } from '../const.js';
 
 const tripMainElement = document.querySelector('.trip-main');
 
@@ -20,6 +22,7 @@ export default class ListPresenter {
 
   #listPoints = [];
   #pointPresenter = new Map();
+  #currentSortType = SortType.DAY;
 
   constructor(listContainer, pointsModel) {
     this.#listContainer = listContainer;
@@ -28,15 +31,15 @@ export default class ListPresenter {
 
   init = () => {
     this.#listPoints = [...this.#pointsModel.points];
-
-    this.#renderTripEventsList();
+    this.#sortPoints(this.#currentSortType);
+    this.#renderPoints();
   };
 
   #renderTrip = (from, to) => {
     this.#listPoints.slice(from, to).forEach((point) => this.#renderPoint(point));
   };
 
-  #renderTripEventsList = () => {
+  #renderPoints = () => {
     render(this.#tripEventsListComponent, this.#listContainer);
 
     if(this.#listPoints.length === 0) {
@@ -50,11 +53,12 @@ export default class ListPresenter {
   };
 
   #renderTripInfo = () => {
-    render(this.#tripInfoComponent, tripMainElement);
+    render(this.#tripInfoComponent, tripMainElement, RenderPosition.AFTERBEGIN);
   };
 
   #renderSort = () => {
-    render(this.#sortComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+    render(this.#sortComponent, this.#tripEventsListComponent.element, RenderPosition.AFTERBEGIN);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
   #renderListEmpty = () => {
@@ -79,5 +83,29 @@ export default class ListPresenter {
 
   #handleModeChange = () => {
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
+  };
+
+  #sortPoints = (sortType) => {
+    switch (sortType) {
+      case SortType.DAY:
+        this.#listPoints.sort(sortByDay);
+        break;
+      case SortType.TIME:
+        this.#listPoints.sort(sortByTime);
+        break;
+      case SortType.PRICE:
+        this.#listPoints.sort(sortByPrice);
+        break;
+    }
+    this.#currentSortType = sortType;
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortPoints(sortType);
+    this.#clearPointList();
+    this.#renderPoints();
   };
 }

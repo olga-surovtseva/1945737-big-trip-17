@@ -41,5 +41,5 @@ export {
   getRandomInteger,
   getRandomArrayElement,
   getMultipleArrayElements,
-  updateItem
+  updateItem,
 };

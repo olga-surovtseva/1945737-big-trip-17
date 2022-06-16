@@ -8,12 +8,27 @@ const createPointTemplate = (point) => {
   const {basePrice, destination, dateFrom, dateTo, isFavorite, offers, type} = point;
 
   const pointDateFrom = formatDate(dateFrom);
-  const pointDateTo = formatDate(dateTo);
+  // const pointDateTo = formatDate(dateTo);
 
   const pointTimeStart = formatTime(dateFrom);
   const pointTimeEnd = formatTime(dateTo);
 
-  const differentTimeStartEnd = formatTime(dayjs(dateTo).diff(dateFrom));
+  // const differentTimeStartEnd = formatTime(dayjs(dateTo).diff(dateFrom));
+  const df = dayjs(dateFrom);
+  const dt = dayjs(dateTo);
+  let mins = dt.diff(df, 'minutes');
+  let hours = parseInt((mins / 60), 10);
+  const days = Math.round(hours / 24);
+  mins = mins - (hours * 60);
+  hours = hours - (days * 24);
+
+  // const differentTimeStartEnd = (dateTo, dateFrom) => {
+
+  //   let a = `${days  }д.${  hours  }ч.${  mins  }м.`;
+  //   if (mins > 59) {
+  //     a =
+  //   }
+  // };
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : 'event__favorite-btn';
 
@@ -37,9 +52,9 @@ const createPointTemplate = (point) => {
         <p class="event__time">
           <time class="event__start-time" datetime="${dateFrom}">${pointTimeStart}</time>
           &mdash;
-          <time class="event__end-time" datetime="${pointDateTo}">${pointTimeEnd}</time>
+          <time class="event__end-time" datetime="${dateTo}">${pointTimeEnd}</time>
         </p>
-        <p class="event__duration">${differentTimeStartEnd}</p>
+        <p class="event__duration">${days}d. ${hours}h. ${mins}m.</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

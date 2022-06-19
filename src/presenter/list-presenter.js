@@ -35,8 +35,8 @@ export default class ListPresenter {
     this.#renderPoints();
   };
 
-  #renderTrip = (from, to) => {
-    this.#listPoints.slice(from, to).forEach((point) => this.#renderPoint(point));
+  #renderTrip = () => {
+    this.#listPoints.forEach((point) => this.#renderPoint(point));
   };
 
   #renderPoints = () => {

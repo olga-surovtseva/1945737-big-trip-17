@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { formatTime, formatDateForForm } from '../utils/point.js';
 import { destinationSection } from '../mock/destination.js';
 import { getOffersByType, getOfferById } from '../utils/offer.js';
@@ -154,16 +154,20 @@ const createFormEditPointTemplate = (editPoint) => {
   );
 };
 
-export default class FormEditPointView extends AbstractView {
-  #editPoint = null;
-
-  constructor(editPoint) {
+export default class FormEditPointView extends AbstractStatefulView {
+  constructor(point, callback) {
     super();
-    this.#editPoint = editPoint;
+    this._state = FormEditPointView.parsePointToState(point);
+
+    this.element.querySelectorAll('.event__type-input').forEach((inputElement) => {
+      inputElement.addEventListener('change', this.#typeToggleHandler);
+    });
+
+    this._callback.FormClose = callback;
   }
 
   get template() {
-    return createFormEditPointTemplate(this.#editPoint);
+    return createFormEditPointTemplate(this._state);
   }
 
   setFormSubmitHandler = (callback) => {
@@ -171,18 +175,51 @@ export default class FormEditPointView extends AbstractView {
     this.element.querySelector('.event__save-btn').addEventListener('submit', this.#formSubmitHandler);
   };
 
-  #formSubmitHandler = (evt) => {
-    evt.preventDefault();
-    this._callback.formSubmit(this.#editPoint);
+  reset = (point) => {
+    this.updateElement(FormEditPointView.parsePointToState(point));
   };
 
-  setFormCloseHandler = (callback) => {
-    this._callback.FormClose = callback;
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit(this.FormEditPointView.parseStateToPoint(this._state));
+  };
+
+  setFormCloseHandler = () => {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formCloseHandler);
   };
 
   #formCloseHandler = (evt) => {
     evt.preventDefault();
     this._callback.FormClose();
+  };
+
+  #typeToggleHandler = (evt) => {
+    this.updateElement({
+      type: evt.target.value,
+    });
+  };
+
+  static parsePointToState = (point) => ({...point,
+    // type: point.pointState !== null,
+  });
+
+  static parseStateToPoint = (state) => {
+    const point = {...state};
+
+    if (!point.pointState) {
+      point.pointState = null;
+    }
+
+    delete point.pointState;
+
+    return point;
+  };
+
+  _restoreHandlers = () => {
+    this.setFormCloseHandler();
+    this.setFormSubmitHandler();
+    this.element.querySelectorAll('.event__type-input').forEach((inputElement) => {
+      inputElement.addEventListener('change', this.#typeToggleHandler);
+    });
   };
 }
